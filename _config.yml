@@ -1,7 +1,7 @@
 # Site settings
-title: Alyssa P. Hacker
-description: Alyssa P. Hacker is a designer and developer based in San Francisco, CA.
-baseurl: "/portfolio"
+title: Historia
+description: Where were they when?
+baseurl: "/"
 
 # Build settings
 markdown: kramdown
@@ -16,3 +16,6 @@ collections:
   work:
     output: true
     permalink: /:name
+#  prototype:
+#    output: true#
+#    permalink: /:name

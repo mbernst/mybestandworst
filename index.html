@@ -2,18 +2,20 @@
 layout: default
 ---
 
+<!--
 {% include hero.html %}
+-->
 
 <div class="gallery container">
   <div class="row">
-    {% assign sorted = site.work | sort: 'title' %}
+    {% assign sorted = site.data.prototype.Sheet1 | where:"Can you find their year of Ph.D. graduation?","Yes" | sort: 'name' %}
     {% for item in sorted %}
       <div class="col-xs-12-xs col-sm-12 col-md-6 col-lg-4 col-xl-4">
-        <a class="gallery__preview" href="{{ site.baseurl }}{{ item.url }}">
-          <div class="gallery__image" style="background-image: url({{ site.baseurl }}/assets/img/{{ item.thumbnail }})"></div>
-          <h2 class="gallery__title">{{ item.title }}</h2>
-          <p class="gallery__description">{{ item.description }}</p>
-        </a>
+        <!--<a class="gallery__preview" href="{{ site.baseurl }}{{ item.url }}">-->
+          <!--<div class="gallery__image" style="background-image: url({{ site.baseurl }}/assets/img/{{ item.thumbnail }})"></div>-->
+          <h2 class="gallery__title">{{ item.name }}</h2>
+          <p class="gallery__description">{{ item.year }}</p>
+        <!--</a>-->
       </div>
     {% endfor %}
   </div>

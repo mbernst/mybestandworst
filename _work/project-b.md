@@ -1,5 +1,5 @@
 ---
-date: '2017-08-08T18:25:24.714Z'
+date: '2017-08-08T18:28:47.335Z'
 layout: work
 title: 'Project B'
 description: 'Redesigning site B as a single-page React app. This should be a short, catchy description of the project.'

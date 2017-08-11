@@ -1,0 +1,72 @@
+---
+layout: default
+---
+
+<!--
+{% include hero.html %}
+-->
+
+<!--
+<div class="gallery container">
+  <div class="row">
+    {% assign people = site.data.prototype.Sheet1 | where:"Can you find their year of Ph.D. graduation?","Yes" | sort:'name' %}
+    {% for item in people %}
+      <div class="col-xs-12-xs col-sm-12 col-md-6 col-lg-4 col-xl-4">
+        <a class="gallery__preview" href="{{ site.baseurl }}{{ item.url }}">
+          <div class="gallery__image" style="background-image: url({{ site.baseurl }}/assets/img/{{ item.thumbnail }})"></div>
+          <h2 class="gallery__title">{{ item.name }}</h2>
+          <p class="gallery__description">{{ item.year }}</p>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+-->
+
+{% assign people = site.data.prototype.Sheet1 | where:"Can you find their year of Ph.D. graduation?","Yes" | sort:'name' %}
+{% assign papers = site.data.paper_citation.Sheet1 | sort:'conferencePercentile' | reverse %}
+
+<div class="gallery container">
+  <div class="row">
+    {% for person in people %}
+      {% assign max_percentile = 0 %}
+      <div class="col-xs-12-xs col-sm-12 col-md-6 col-lg-6 col-xl-6">
+        <h2 class="gallery__title">{{ person.name }}</h2>
+        {% for paper in papers %}
+          {% assign percentile = paper.conferencePercentile | round %}
+          {% if paper.authors contains person.name and paper.year <= person.year %}
+            {% if percentile >= max_percentile %}
+              {% assign max_percentile = percentile %}
+                <p class="gallery__description">{{ paper.title }}</p>
+                <p class="gallery__description">{{ paper.venue }} {{ paper.year }},
+                {% case percentile %}
+                  {% when 1, 21, 31, 41, 51, 61, 71, 81, 91 %}
+                    {{percentile}}st
+                  {% when 2, 22, 32, 42, 52, 62, 72, 82, 92 %}
+                    {{percentile}}nd
+                  {% when 3, 23, 33, 43, 53, 63, 73, 83, 93 %}
+                    {{percentile}}rd
+                  {% else %}
+                    {{percentile}}th
+                {% endcase %}
+                percentile
+                </p>
+                <p class="gallery__description">
+                {% assign years_before = person.year | minus: paper.year %}
+                {% if years_before == 0 %}
+                  The year they graduated
+                {% elsif years_before == 1 %}
+                  1 year before graduating
+                {% else %}
+                  {{ years_before }} years before graduating
+                {% endif %}
+                </p>
+            {% else %}
+              {% break %}
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+</div>

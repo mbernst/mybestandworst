@@ -23,8 +23,8 @@ layout: default
 </div>
 -->
 
-{% assign people = site.data.prototype.Sheet1 | where:"Can you find their year of Ph.D. graduation?","Yes" | sort:'name' %}
-{% assign papers = site.data.paper_citation.Sheet1 | sort:'year' %}
+{% assign people = site.data.author_citations.sheet | where:"Can you find their year of Ph.D. graduation?","Yes" | sort:'name' %}
+{% assign papers = site.data.paper_citations.sheet | sort:'year' %}
 
 <div class="gallery container">
   <div class="row">

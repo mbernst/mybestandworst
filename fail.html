@@ -7,7 +7,32 @@ layout: default
 
 {% assign people = site.data.prototype.Sheet1 | where:"Can you find their year of Ph.D. graduation?","Yes" | sort:'name' %}
 
+
+{% comment %}
 {% assign papers = site.data.venues.UIST  %}
+{% endcomment %}
+
+{% assign papers = site.emptyArray %}
+{% for data in site.data.venues %}
+    {% if data[0] != "API_Spreadsheet" and data[0] != "author_citations" and  data[0] != "cloudstitch" and data[0] != "paper_citations" and data[0] != "paper_citation" and data[0] != "prototype" and data[0] != "CHI_Extended_Abstracts" %}
+      {% comment %}
+      this makes me want to punch Liquid
+      {% endcomment %}
+      {% for key1 in data %}
+        {% for key2 in key1 %}
+          {% for key3 in key2 %}
+            {% for key4 in key3 %}
+              {% if key4.title %}
+                {% assign papers = papers | push: key4 %}
+              {% endif %}
+            {% endfor %}
+          {% endfor %}
+        {% endfor %}
+      {% endfor %}
+    {% endif %}
+{% endfor %}
+
+{% assign papers = papers | sort: "year" %}
 
 <div class="gallery container">
   <div class="row">

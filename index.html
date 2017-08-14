@@ -24,7 +24,7 @@ layout: default
 -->
 
 {% assign people = site.data.prototype.Sheet1 | where:"Can you find their year of Ph.D. graduation?","Yes" | sort:'name' %}
-{% assign papers = site.data.paper_citation.Sheet1 | sort:'year' %}
+{% assign papers = site.data.paper_citations.Sheet1 | sort:'year' %}
 
 <div class="gallery container">
   <div class="row">

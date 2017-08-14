@@ -16,6 +16,7 @@ collections:
   work:
     output: true
     permalink: /:name
+emptyArray: []
 #  prototype:
 #    output: true#
 #    permalink: /:name

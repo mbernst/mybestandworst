@@ -6,7 +6,7 @@ layout: default
 {% include hero.html %}
 -->
 
-<!--
+{% comment %}
 <div class="gallery container">
   <div class="row">
     {% assign people = site.data.prototype.Sheet1 | where:"Can you find their year of Ph.D. graduation?","Yes" | sort:'name' %}
@@ -21,10 +21,10 @@ layout: default
     {% endfor %}
   </div>
 </div>
--->
+{% endcomment %}
 
 {% assign people = site.data.prototype.Sheet1 | where:"Can you find their year of Ph.D. graduation?","Yes" | sort:'name' %}
-{% assign papers = site.data.paper_citation.sheet %}
+{% assign papers = site.data.venues.UIST  %}
 
 <div class="gallery container">
   <div class="row">

@@ -3,59 +3,59 @@ layout: default
 title: "An ode to the struggles along the way."
 ---
 
-{% include hero.html %}
+{%- include hero.html -%}
 
-{% assign people = site.data.prototype.data | sort:'name' %}
-{% assign papers = site.data.venues.VisSym  %}
+{%- assign people = site.data.prototype.data | sort:'name' -%}
+{%- assign papers = site.data.venues.VisSym  -%}
 
 <div class="gallery container">
   <div class="row">
-    {% for person in people %}
-      {% if person.year != "" %}
+    {%- for person in people -%}
+      {%- if person.year != "" -%}
         <div class="col-xs-12-xs col-sm-12 col-md-6 col-lg-4 col-xl-4" style="padding-bottom: 2em;">
           <h2 class="gallery__title">{{ person.name }}</h2>
-        {% for paper in papers %}
-          {% assign percentile = paper.conferencePercentile | round %}
-          {% assign hasPaper = false %}
-          {% if paper.author_ids contains person.id and percentile < 50 and paper.year <= person.year %}
-            {% if paper.venue != "CHI Extended Abstracts" and paper.venue != "CHI Extended Abstracts" %}
-              {% assign hasPaper = true %}
+        {%- for paper in papers -%}
+          {%- assign percentile = paper.conferencePercentile | round -%}
+          {%- assign hasPaper = false -%}
+          {%- if paper.author_ids contains person.id and percentile < 50 and paper.year <= person.year -%}
+            {%- if paper.venue != "CHI Extended Abstracts" and paper.venue != "CHI Extended Abstracts" -%}
+              {%- assign hasPaper = true -%}
               <div class="paper" style="padding-bottom: 1em;">
                 <p class="gallery__description">{{ paper.title }}
                 <p class="gallery__description">
-                {% case percentile %}
-                  {% when 1, 21, 31, 41, 51, 61, 71, 81, 91 %}
+                {%- case percentile -%}
+                  {%- when 1, 21, 31, 41, 51, 61, 71, 81, 91 -%}
                     {{percentile}}st
-                  {% when 2, 22, 32, 42, 52, 62, 72, 82, 92 %}
+                  {%- when 2, 22, 32, 42, 52, 62, 72, 82, 92 -%}
                     {{percentile}}nd
-                  {% when 3, 23, 33, 43, 53, 63, 73, 83, 93 %}
+                  {%- when 3, 23, 33, 43, 53, 63, 73, 83, 93 -%}
                     {{percentile}}rd
-                  {% else %}
+                  {%- else -%}
                     {{percentile}}th
-                {% endcase %}
+                {%- endcase -%}
                 percentile of citations in {{ paper.venue }} {{ paper.year }}
                 </p>
                 <p class="gallery__description">
-                {% assign years_before = person.year | minus: paper.year %}
-                {% if years_before == 0 %}
+                {%- assign years_before = person.year | minus: paper.year -%}
+                {%- if years_before == 0 -%}
                   The year they graduated
-                {% elsif years_before == 1 %}
+                {%- elsif years_before == 1 -%}
                   1 year before graduating
-                {% else %}
+                {%- else -%}
                   {{ years_before }} years before graduating
-                {% endif %}
+                {%- endif -%}
                 </p>
               </div>
-            {% endif %}
-          {% endif %}
-        {% endfor %}
-        {% unless hasPaper %}
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- unless hasPaper -%}
           <div class="paper" style="padding-bottom: 1em;">
             <p class="gallery__description">No papers in our dataset.</p>
           </div>
-        {% endunless %}
+        {%- endunless -%}
         </div>
-      {% endif %}
-    {% endfor %}
+      {%- endif -%}
+    {%- endfor -%}
   </div>
 </div>

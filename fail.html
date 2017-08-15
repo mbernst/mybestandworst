@@ -6,13 +6,17 @@ title: "An ode to the struggles along the way."
 {%- include hero.html -%}
 
 {% assign people = site.data.prototype.data | sort:'name' %}
-{% assign papers = site.data.venues.allpapers  %}
+{% assign papers = site.data.venues.VisSym  %}
 
 <div class="gallery container">
+    {%- assign modindex = 3 -%}
     {%- for person in people -%}
-      <div class="row">
+      {%- assign mod = forloop.index0 | modulo: modindex -%}
+      {%- if mod == 0 -%}
+        <div class="row">
+      {%- endif -%}
       {%- if person.year != "" -%}
-        <div class="col-xs-12-xs col-sm-12 col-md-6 col-lg-4 col-xl-4" style="padding-bottom: 2em;">
+        <div class="col-xs-12-xs col-sm-12 col-md-12 col-lg-4 col-xl-4" style="padding-bottom: 2em;">
           <h2 class="gallery__title">{{- person.name -}}</h2>
         {%- for paper in papers -%}
           {%- assign percentile = paper.conferencePercentile | round -%}
@@ -56,6 +60,9 @@ title: "An ode to the struggles along the way."
         {%- endunless -%}
         </div>
       {%- endif -%}
-      </div>
+      {%- assign modleft = modindex | minus: mod -%}
+      {%- if modleft == 1 -%}
+        </div>
+      {%- endif -%}
     {%- endfor -%}
 </div>

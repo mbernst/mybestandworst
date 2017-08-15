@@ -6,30 +6,7 @@ layout: default
 
 
 {% assign people = site.data.prototype.Sheet1 | where:"Can you find their year of Ph.D. graduation?","Yes" | sort:'name' %}
-
-
-{% assign papers = site.data.venues.UIST  %}
-
-{% comment %}
-{% assign papers = site.emptyArray %}
-{% for data in site.data.venues %}
-    {% if data[0] != "API_Spreadsheet" and data[0] != "author_citations" and  data[0] != "cloudstitch" and data[0] != "paper_citations" and data[0] != "paper_citation" and data[0] != "prototype" and data[0] != "CHI_Extended_Abstracts" %}
-      {% for key1 in data %}
-        {% for key2 in key1 %}
-          {% for key3 in key2 %}
-            {% for key4 in key3 %}
-              {% if key4.title %}
-                {% assign papers = papers | push: key4 %}
-              {% endif %}
-            {% endfor %}
-          {% endfor %}
-        {% endfor %}
-      {% endfor %}
-    {% endif %}
-{% endfor %}
-{% assign papers = papers | sort: "year" %}
-
-{% endcomment %}
+{% assign papers = site.data.venues.allpapers  %}
 
 <div class="gallery container">
   <div class="row">
@@ -38,7 +15,10 @@ layout: default
         <h2 class="gallery__title">{{ person.name }}</h2>
       {% for paper in papers %}
         {% assign percentile = paper.conferencePercentile | round %}
+        {% assign hasPaper = false %}
         {% if paper.author_ids contains person.id and percentile < 50 and paper.year <= person.year %}
+          {% if paper.venue != "CHI Extended Abstracts" and paper.venue != "CHI Extended Abstracts"}
+          {% assign hasPaper = true %}
           <div class="paper" style="padding-bottom: 1em;">
             <p class="gallery__description">{{ paper.title }}
             <p class="gallery__description">
@@ -67,6 +47,11 @@ layout: default
           </div>
         {% endif %}
       {% endfor %}
+      {% if !hasPaper %}
+        <div class="paper" style="padding-bottom: 1em;">
+          <p class="gallery__description">No papers in our dataset.</p>
+        </div>
+      {% endif %}
       </div>
     {% endfor %}
   </div>

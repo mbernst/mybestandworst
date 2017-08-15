@@ -6,18 +6,18 @@ title: "An ode to the struggles along the way."
 {%- include hero.html -%}
 
 {% assign people = site.data.prototype.data | sort:'name' %}
-{% assign papers = site.data.venues.VisSym  %}
+{% assign papers = site.data.venues.allpapers  %}
 
 <div class="gallery container">
-    {%- assign modindex = 3 -%}
+    {%- assign modindex = 2 -%}
     {%- for person in people -%}
       {%- assign mod = forloop.index0 | modulo: modindex -%}
       {%- if mod == 0 -%}
         <div class="row">
       {%- endif -%}
       {%- if person.year != "" -%}
-        <div class="col-xs-12-xs col-sm-12 col-md-12 col-lg-4 col-xl-4" style="padding-bottom: 2em;">
-          <h2 class="gallery__title">{{- person.name -}}</h2>
+        <div class="col-xs-12-xs col-sm-12 col-md-12 col-lg-6 col-xl-6" style="padding-bottom: 2em;">
+          <h2 class="gallery__title">{{ person.name }}</h2>
         {%- for paper in papers -%}
           {%- assign percentile = paper.conferencePercentile | round -%}
           {%- assign hasPaper = false -%}
@@ -25,19 +25,20 @@ title: "An ode to the struggles along the way."
             {%- if paper.venue != "CHI Extended Abstracts" and paper.venue != "ACM Crossroads" -%}
               {%- assign hasPaper = true -%}
               <div class="paper" style="padding-bottom: 1em;">
-                <p class="gallery__description">{{- paper.title -}}
+                <p class="gallery__description">{{ paper.title }}
+                <p class="gallery__description">{{ paper.venue }} {{ paper.year }}</p>
                 <p class="gallery__description">
                 {%- case percentile -%}
                   {%- when 1, 21, 31, 41, 51, 61, 71, 81, 91 -%}
-                    {{-percentile-}}st
+                    {{percentile}}st
                   {%- when 2, 22, 32, 42, 52, 62, 72, 82, 92 -%}
-                    {{-percentile-}}nd
+                    {{percentile}}nd
                   {%- when 3, 23, 33, 43, 53, 63, 73, 83, 93 -%}
-                    {{-percentile-}}rd
+                    {{percentile}}rd
                   {%- else -%}
-                    {{-percentile-}}th
+                    {{percentile}}th
                 {%- endcase -%}
-                percentile of citations in {{- paper.venue -}} {{- paper.year -}}
+                percentile
                 </p>
                 <p class="gallery__description">
                 {%- assign years_before = person.year | minus: paper.year -%}
@@ -46,7 +47,7 @@ title: "An ode to the struggles along the way."
                 {%- elsif years_before == 1 -%}
                   1 year before graduating
                 {%- else -%}
-                  {{- years_before -}} years before graduating
+                  {{ years_before }} years before graduating
                 {%- endif -%}
                 </p>
               </div>

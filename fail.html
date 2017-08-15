@@ -6,7 +6,7 @@ title: "An ode to the struggles along the way."
 {% include hero.html %}
 
 {% assign people = site.data.prototype.data | sort:'name' %}
-{% assign papers = site.data.venues.VisSym  %}
+{% assign papers = site.data.venues.allpapers  %}
 
 <div class="gallery container">
   <div class="row">
@@ -18,7 +18,7 @@ title: "An ode to the struggles along the way."
           {% assign percentile = paper.conferencePercentile | round %}
           {% assign hasPaper = false %}
           {% if paper.author_ids contains person.id and percentile < 50 and paper.year <= person.year %}
-            {% if paper.venue != "CHI Extended Abstracts" and paper.venue != "CHI Extended Abstracts" %}
+            {% if paper.venue != "CHI Extended Abstracts" and paper.venue != "ACM Crossroads" %}
               {% assign hasPaper = true %}
               <div class="paper" style="padding-bottom: 1em;">
                 <p class="gallery__description">{{ paper.title }}

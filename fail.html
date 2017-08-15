@@ -11,6 +11,7 @@ title: "An ode to the struggles along the way."
 <div class="gallery container">
     {%- assign modindex = 3 -%}
     {%- for person in people -%}
+      {%- assign haspaper = false -%}
       {%- assign mod = forloop.index0 | modulo: modindex -%}
       {%- if mod == 0 -%}
         <div class="row">
@@ -20,10 +21,9 @@ title: "An ode to the struggles along the way."
           <h2 class="gallery__title">{{- person.name -}}</h2>
         {%- for paper in papers -%}
           {%- assign percentile = paper.conferencePercentile | round -%}
-          {%- assign hasPaper = false -%}
           {%- if paper.author_ids contains person.id and percentile < 50 and paper.year <= person.year -%}
+            {%- assign haspaper = true -%}
             {%- if paper.venue != "CHI Extended Abstracts" and paper.venue != "ACM Crossroads" -%}
-              {%- assign hasPaper = true -%}
               <div class="paper" style="padding-bottom: 1em;">
                 <p class="gallery__description">{{- paper.title -}}
                 <p class="gallery__description">
@@ -53,7 +53,7 @@ title: "An ode to the struggles along the way."
             {%- endif -%}
           {%- endif -%}
         {%- endfor -%}
-        {%- unless hasPaper -%}
+        {%- unless haspaper -%}
           <div class="paper" style="padding-bottom: 1em;">
             <p class="gallery__description">No papers in our dataset.</p>
           </div>

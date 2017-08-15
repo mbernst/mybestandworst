@@ -5,56 +5,57 @@ title: "An ode to the struggles along the way."
 
 {% include hero.html %}
 
-
-{% assign people = site.data.prototype.Sheet1 | where:"Can you find their year of Ph.D. graduation?","Yes" | sort:'name' %}
+{% assign people = site.data.prototype.data | sort:'name' %}
 {% assign papers = site.data.venues.VisSym  %}
 
 <div class="gallery container">
   <div class="row">
     {% for person in people %}
-      <div class="col-xs-12-xs col-sm-12 col-md-6 col-lg-6 col-xl-6" style="padding-bottom: 2em;">
-        <h2 class="gallery__title">{{ person.name }}</h2>
-      {% for paper in papers %}
-        {% assign percentile = paper.conferencePercentile | round %}
-        {% assign hasPaper = false %}
-        {% if paper.author_ids contains person.id and percentile < 50 and paper.year <= person.year %}
-          {% if paper.venue != "CHI Extended Abstracts" and paper.venue != "CHI Extended Abstracts" %}
-            {% assign hasPaper = true %}
-            <div class="paper" style="padding-bottom: 1em;">
-              <p class="gallery__description">{{ paper.title }}
-              <p class="gallery__description">
-              {% case percentile %}
-                {% when 1, 21, 31, 41, 51, 61, 71, 81, 91 %}
-                  {{percentile}}st
-                {% when 2, 22, 32, 42, 52, 62, 72, 82, 92 %}
-                  {{percentile}}nd
-                {% when 3, 23, 33, 43, 53, 63, 73, 83, 93 %}
-                  {{percentile}}rd
+      {% if person.year != "" %}
+        <div class="col-xs-12-xs col-sm-12 col-md-6 col-lg-6 col-xl-6" style="padding-bottom: 2em;">
+          <h2 class="gallery__title">{{ person.name }}</h2>
+        {% for paper in papers %}
+          {% assign percentile = paper.conferencePercentile | round %}
+          {% assign hasPaper = false %}
+          {% if paper.author_ids contains person.id and percentile < 50 and paper.year <= person.year %}
+            {% if paper.venue != "CHI Extended Abstracts" and paper.venue != "CHI Extended Abstracts" %}
+              {% assign hasPaper = true %}
+              <div class="paper" style="padding-bottom: 1em;">
+                <p class="gallery__description">{{ paper.title }}
+                <p class="gallery__description">
+                {% case percentile %}
+                  {% when 1, 21, 31, 41, 51, 61, 71, 81, 91 %}
+                    {{percentile}}st
+                  {% when 2, 22, 32, 42, 52, 62, 72, 82, 92 %}
+                    {{percentile}}nd
+                  {% when 3, 23, 33, 43, 53, 63, 73, 83, 93 %}
+                    {{percentile}}rd
+                  {% else %}
+                    {{percentile}}th
+                {% endcase %}
+                percentile of citations in {{ paper.venue }} {{ paper.year }}
+                </p>
+                <p class="gallery__description">
+                {% assign years_before = person.year | minus: paper.year %}
+                {% if years_before == 0 %}
+                  The year they graduated
+                {% elsif years_before == 1 %}
+                  1 year before graduating
                 {% else %}
-                  {{percentile}}th
-              {% endcase %}
-              percentile of citations in {{ paper.venue }} {{ paper.year }}
-              </p>
-              <p class="gallery__description">
-              {% assign years_before = person.year | minus: paper.year %}
-              {% if years_before == 0 %}
-                The year they graduated
-              {% elsif years_before == 1 %}
-                1 year before graduating
-              {% else %}
-                {{ years_before }} years before graduating
-              {% endif %}
-              </p>
-            </div>
+                  {{ years_before }} years before graduating
+                {% endif %}
+                </p>
+              </div>
+            {% endif %}
           {% endif %}
-        {% endif %}
-      {% endfor %}
-      {% unless hasPaper %}
-        <div class="paper" style="padding-bottom: 1em;">
-          <p class="gallery__description">No papers in our dataset.</p>
+        {% endfor %}
+        {% unless hasPaper %}
+          <div class="paper" style="padding-bottom: 1em;">
+            <p class="gallery__description">No papers in our dataset.</p>
+          </div>
+        {% endunless %}
         </div>
-      {% endunless %}
-      </div>
+      {% endif %}
     {% endfor %}
   </div>
 </div>

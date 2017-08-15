@@ -23,7 +23,7 @@ layout: default
 </div>
 {% endcomment %}
 
-{% assign people = site.data.prototype.Sheet1 | where:"Can you find their year of Ph.D. graduation?","Yes" | sort:'name' %}
+{% assign people = site.data.prototype.data | sort:'name' %}
 {% assign papers = site.data.venues.VisSym %}
 
 <div class="gallery container">

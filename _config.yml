@@ -1,7 +1,7 @@
 # Site settings
 title: Historia
 description: Where were they when?
-baseurl: "/portfolio/"
+baseurl: "/portfolio"
 
 # Build settings
 markdown: kramdown

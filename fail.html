@@ -7,7 +7,7 @@ description: Non-famous papers by famous people before they finished their PhDs
 {%- include hero.html -%}
 
 {%- assign people = site.data.prototype.data | sort:'name' -%}
-{%- assign papers = site.data.venues.UIST -%}
+{%- assign papers = site.data.venues.allpapers -%}
 {%- assign empty_authors = site.emptyArray -%}
 
 <div class="gallery container">

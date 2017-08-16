@@ -7,64 +7,109 @@ description: Non-famous papers by famous people before they finished their PhDs
 {%- include hero.html -%}
 
 {% assign people = site.data.prototype.data | sort:'name' %}
-{% assign papers = site.data.venues.allpapers  %}
+{% assign papers = site.data.venues.UIST  %}
+{%- assign empty_authors = site.emptyArray -%}
 
 <div class="gallery container">
+    {%- assign mod = 0 -%}
     {%- assign modindex = 2 -%}
     {%- for person in people -%}
-      {%- assign haspaper = false -%}
-      {%- assign mod = forloop.index0 | modulo: modindex -%}
-      {%- if mod == 0 -%}
-        <div class="row">
-      {%- endif -%}
+      {%- assign author_papers = site.emptyArray -%}
+      {%- assign low_cited_papers = site.emptyArray -%}
+
       {%- if person.year != "" -%}
-        <div class="col-xs-12-xs col-sm-12 col-md-12 col-lg-6 col-xl-6" style="padding-bottom: 2em;">
-          <h2 class="gallery__title">{{ person.name }}</h2>
         {%- for paper in papers -%}
           {%- assign percentile = paper.conferencePercentile | round -%}
-          {%- if paper.author_ids contains person.id and percentile < 50 and paper.year <= person.year -%}
-            {%- assign haspaper = true -%}
-            {%- if paper.venue != "CHI Extended Abstracts" and paper.venue != "ACM Crossroads" -%}
-              <div class="paper" style="padding-bottom: 1em;">
-                <p class="gallery__description">{{ paper.title }}
-                <p class="gallery__description"></p>
-                <p class="gallery__description">
-                {%- case percentile -%}
-                  {%- when 1, 21, 31, 41, 51, 61, 71, 81, 91 -%}
-                    {{percentile}}st
-                  {%- when 2, 22, 32, 42, 52, 62, 72, 82, 92 -%}
-                    {{percentile}}nd
-                  {%- when 3, 23, 33, 43, 53, 63, 73, 83, 93 -%}
-                    {{percentile}}rd
-                  {%- else -%}
-                    {{percentile}}th
-                {%- endcase -%}
-                &nbsp;percentile in {{ paper.venue }} {{ paper.year }}
-                </p>
-                <p class="gallery__description">
-                {%- assign years_before = person.year | minus: paper.year -%}
-                {%- if years_before == 0 -%}
-                  The year they graduated
-                {%- elsif years_before == 1 -%}
-                  1 year before graduating
-                {%- else -%}
-                  {{ years_before }} years before graduating
-                {%- endif -%}
-                </p>
-              </div>
+          {%- assign authors = paper.author_ids | split:", " -%}
+          {%- if authors[0] == person.id and paper.year <= person.year -%}
+            {%- assign author_papers = author_papers | push: paper -%}
+            {%- if percentile < 50 and paper.venue != "CHI Extended Abstracts" and paper.venue != "ACM Crossroads" -%}
+              {%- assign low_cited_papers = low_cited_papers | push: paper -%}
             {%- endif -%}
           {%- endif -%}
         {%- endfor -%}
-        {%- unless haspaper -%}
-          <div class="paper" style="padding-bottom: 1em;">
-            <p class="gallery__description">No papers in our dataset.</p>
+
+        {%- if low_cited_papers.size > 0 -%}
+          {%- assign mod = mod | modulo: modindex -%}
+          {%- if mod == 0 -%}
+            <div class="row">
+          {%- endif -%}
+
+          {%- assign max_cites = 0 -%}
+          {%- assign max_cited_paper = author_papers[0] -%}
+
+          {%- for author_paper in author_papers -%}
+            {%- assign cites = author_paper.cites | to_integer -%}
+            {%- if max_cites < cites -%}
+              {%- assign max_cites = cites -%}
+              {%- assign max_cited_paper = author_paper -%}
+            {%- endif -%}
+          {%- endfor -%}
+
+          <div class="col-xs-12-xs col-sm-12 col-md-12 col-lg-6 col-xl-6" style="padding-bottom: 2em;">
+            <h2 class="gallery__title">{{ person.name }}</h2>
+            <div class="row">
+              <div class="col-md-3 gallery__note">
+                <p class="">known for</p>
+              </div>
+              <div class="col-md-9">
+                <div class="paper" style="padding-bottom: 1em;">
+                  <p class="gallery__description">{{ max_cited_paper.title }}
+                  <p class="gallery__description">{{ max_cited_paper.venue }} {{ max_cited_paper.year }}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-3 gallery__note">
+                <p class="">also published</p>
+              </div>
+              <div class="col-md-9">
+                {%- for paper in low_cited_papers -%}
+                    {%- assign percentile = paper.conferencePercentile | round -%}
+                    <div class="paper" style="padding-bottom: 1em;">
+                      <p class="gallery__description">{{ paper.title }}
+                      <p class="gallery__description"></p>
+                      <p class="gallery__description">
+                      {%- case percentile -%}
+                        {%- when 1, 21, 31, 41, 51, 61, 71, 81, 91 -%}
+                          {{percentile}}st
+                        {%- when 2, 22, 32, 42, 52, 62, 72, 82, 92 -%}
+                          {{percentile}}nd
+                        {%- when 3, 23, 33, 43, 53, 63, 73, 83, 93 -%}
+                          {{percentile}}rd
+                        {%- else -%}
+                          {{percentile}}th
+                      {%- endcase -%}
+                      &nbsp;percentile in {{ paper.venue }} {{ paper.year }}
+                      </p>
+                      <p class="gallery__description">
+                      {%- assign years_before = person.year | minus: paper.year -%}
+                      {%- if years_before == 0 -%}
+                        The year they graduated
+                      {%- elsif years_before == 1 -%}
+                        1 year before graduating
+                      {%- else -%}
+                        {{ years_before }} years before graduating
+                      {%- endif -%}
+                      </p>
+                    </div>
+                {%- endfor -%}
+
+              </div>
+            </div>
           </div>
-        {%- endunless -%}
-        </div>
-      {%- endif -%}
-      {%- assign modleft = modindex | minus: mod -%}
-      {%- if modleft == 1 -%}
-        </div>
+
+          {%- assign modleft = modindex | minus: mod -%}
+          {%- if modleft == 1 -%}
+          </div>
+          {%- endif -%}
+          {%- assign mod = mod | plus: 1 -%}
+        {%- else -%}
+          {%- assign empty_authors = empty_authors | push: person -%}
+        {%- endif -%}
       {%- endif -%}
     {%- endfor -%}
-</div>
+
+    <div class="container"><div class="row"><p class="col-md-12">Authors whose grad school papers are not in our dataset: {{ empty_authors | map: 'name' | join: ", "}}</p></div></div>
+  </div>

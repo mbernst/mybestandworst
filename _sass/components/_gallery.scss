@@ -44,4 +44,9 @@
     margin-bottom: 0;
     font-size: 1rem;
   }
+
+  &__note p {
+    font-size: 0.75rem;
+    color: $header-color;
+  }
 }

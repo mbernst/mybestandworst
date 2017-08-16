@@ -69,8 +69,6 @@ description: Non-famous papers by famous people before they finished their PhDs
                 {%- for paper in low_cited_papers -%}
                     {%- assign percentile = paper.conferencePercentile | round -%}
                     <div class="paper" style="padding-bottom: 1em;">
-                      <p class="gallery__description">{{ paper.title }}
-                      <p class="gallery__description"></p>
                       <p class="gallery__description">
                       {%- case percentile -%}
                         {%- when 1, 21, 31, 41, 51, 61, 71, 81, 91 -%}
@@ -84,6 +82,7 @@ description: Non-famous papers by famous people before they finished their PhDs
                       {%- endcase -%}
                       &nbsp;percentile in {{ paper.venue }} {{ paper.year }}
                       </p>
+                      <p class="gallery__description">{{ paper.title }}
                       <p class="gallery__description">
                       {%- assign years_before = person.year | minus: paper.year -%}
                       {%- if years_before == 0 -%}

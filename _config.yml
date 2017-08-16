@@ -1,7 +1,7 @@
 # Site settings
 title: Historia
 description: Where were they when?
-baseurl: "/msb/projects/ode/"
+baseurl: "/"
 
 # Build settings
 markdown: kramdown

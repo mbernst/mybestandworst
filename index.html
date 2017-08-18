@@ -15,35 +15,47 @@ description: Non-famous papers by famous people before they finished their PhDs
     {%- assign modindex = 2 -%}
     {%- for person in people -%}
       {%- assign author_papers = site.emptyArray -%}
-      {%- assign low_cited_papers = site.emptyArray -%}
 
       {%- if person.year != "" -%}
         {%- for paper in papers -%}
           {%- assign percentile = paper.conferencePercentile | round -%}
           {%- assign authors = paper.author_ids | split:", " -%}
           {%- if authors[0] == person.id and paper.year <= person.year -%}
-            {%- assign author_papers = author_papers | push: paper -%}
-            {%- if percentile < 50 and paper.venue != "CHI Extended Abstracts" and paper.venue != "ACM Crossroads" -%}
-              {%- assign low_cited_papers = low_cited_papers | push: paper -%}
+            {%- if paper.venue != "CHI Extended Abstracts" and paper.venue != "ACM Crossroads" -%}
+              {%- assign author_papers = author_papers | push: paper -%}
             {%- endif -%}
           {%- endif -%}
         {%- endfor -%}
 
-        {%- if low_cited_papers.size > 0 -%}
-          {%- assign low_cited_papers = low_cited_papers | sort: 'year' -%}
+        {%- if author_papers.size > 1 -%}
           {%- assign mod = mod | modulo: modindex -%}
           {%- if mod == 0 -%}
             <div class="row">
           {%- endif -%}
 
           {%- assign max_cites = 0 -%}
+          {%- assign max_percentile = 0 -%}
           {%- assign max_cited_paper = author_papers[0] -%}
+
+          {%- assign min_percentile = 100 -%}
+          {%- assign min_cited_paper = author_papers[0] -%}
 
           {%- for author_paper in author_papers -%}
             {%- assign cites = author_paper.cites | to_integer -%}
-            {%- if max_cites < cites -%}
+            {%- assign percentile = author_paper.conferencePercentile | round -%}
+            {%- if percentile == 100 -%}
+              {%- assign percentile = 99 -%}
+            {%- endif -%}
+
+
+            {%- if cites > max_cites -%}
               {%- assign max_cites = cites -%}
+              {%- assign max_percentile = percentile -%}
               {%- assign max_cited_paper = author_paper -%}
+            {%- endif -%}
+            {%- if percentile < min_percentile -%}
+              {%- assign min_percentile = percentile -%}
+              {%- assign min_cited_paper = author_paper -%}
             {%- endif -%}
           {%- endfor -%}
 
@@ -55,8 +67,30 @@ description: Non-famous papers by famous people before they finished their PhDs
               </div>
               <div class="col-md-9">
                 <div class="paper" style="padding-bottom: 1em;">
+
+                  <p class="gallery__description">
+                  {%- case max_percentile -%}
+                    {%- when 1, 21, 31, 41, 51, 61, 71, 81, 91 -%}
+                      {{max_percentile}}st
+                    {%- when 2, 22, 32, 42, 52, 62, 72, 82, 92 -%}
+                      {{max_percentile}}nd
+                    {%- when 3, 23, 33, 43, 53, 63, 73, 83, 93 -%}
+                      {{max_percentile}}rd
+                    {%- else -%}
+                      {{max_percentile}}th
+                  {%- endcase -%}
+                  &nbsp;percentile in {{ max_cited_paper.venue }} {{ max_cited_paper.year }}</p>
                   <p class="gallery__description">{{ max_cited_paper.title }}
-                  <p class="gallery__description">{{ max_cited_paper.venue }} {{ max_cited_paper.year }}</p>
+                  <p class="gallery__description">
+                  {%- assign years_before = person.year | minus: max_cited_paper.year -%}
+                  {%- if years_before == 0 -%}
+                    The year they graduated
+                  {%- elsif years_before == 1 -%}
+                    1 year before graduating
+                  {%- else -%}
+                    {{ years_before }} years before graduating
+                  {%- endif -%}
+                  </p>
                 </div>
               </div>
             </div>
@@ -66,35 +100,32 @@ description: Non-famous papers by famous people before they finished their PhDs
                 <p class="">also published</p>
               </div>
               <div class="col-md-9">
-                {%- for paper in low_cited_papers -%}
-                    {%- assign percentile = paper.conferencePercentile | round -%}
-                    <div class="paper" style="padding-bottom: 1em;">
-                      <p class="gallery__description">
-                      {%- case percentile -%}
-                        {%- when 1, 21, 31, 41, 51, 61, 71, 81, 91 -%}
-                          {{percentile}}st
-                        {%- when 2, 22, 32, 42, 52, 62, 72, 82, 92 -%}
-                          {{percentile}}nd
-                        {%- when 3, 23, 33, 43, 53, 63, 73, 83, 93 -%}
-                          {{percentile}}rd
-                        {%- else -%}
-                          {{percentile}}th
-                      {%- endcase -%}
-                      &nbsp;percentile in {{ paper.venue }} {{ paper.year }}
-                      </p>
-                      <p class="gallery__description">{{ paper.title }}
-                      <p class="gallery__description">
-                      {%- assign years_before = person.year | minus: paper.year -%}
-                      {%- if years_before == 0 -%}
-                        The year they graduated
-                      {%- elsif years_before == 1 -%}
-                        1 year before graduating
+                  <div class="paper" style="padding-bottom: 1em;">
+                    <p class="gallery__description">
+                    {%- case min_percentile -%}
+                      {%- when 1, 21, 31, 41, 51, 61, 71, 81, 91 -%}
+                        {{min_percentile}}st
+                      {%- when 2, 22, 32, 42, 52, 62, 72, 82, 92 -%}
+                        {{min_percentile}}nd
+                      {%- when 3, 23, 33, 43, 53, 63, 73, 83, 93 -%}
+                        {{min_percentile}}rd
                       {%- else -%}
-                        {{ years_before }} years before graduating
-                      {%- endif -%}
-                      </p>
-                    </div>
-                {%- endfor -%}
+                        {{min_percentile}}th
+                    {%- endcase -%}
+                    &nbsp;percentile in {{ min_cited_paper.venue }} {{ min_cited_paper.year }}
+                    </p>
+                    <p class="gallery__description">{{ min_cited_paper.title }}
+                    <p class="gallery__description">
+                    {%- assign years_before = person.year | minus: min_cited_paper.year -%}
+                    {%- if years_before == 0 -%}
+                      The year they graduated
+                    {%- elsif years_before == 1 -%}
+                      1 year before graduating
+                    {%- else -%}
+                      {{ years_before }} years before graduating
+                    {%- endif -%}
+                    </p>
+                  </div>
 
               </div>
             </div>
@@ -111,5 +142,5 @@ description: Non-famous papers by famous people before they finished their PhDs
       {%- endif -%}
     {%- endfor -%}
 
-    <div class="container"><div class="row"><p class="col-md-12">Authors whose grad school papers are not in our dataset: {{ empty_authors | map: 'name' | join: ", "}}</p></div></div>
+    <div class="container"><div class="row"><p class="col-md-12">Academic heroes for whom we don't have enough data: {{ empty_authors | map: 'name' | join: ", "}}</p></div></div>
   </div>

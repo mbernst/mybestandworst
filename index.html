@@ -1,12 +1,12 @@
 ---
 layout: default
-title: "An ode to the struggles along the way."
+title: "We struggled too"
 description: Non-famous papers by famous people before they finished their PhDs
 ---
 
 {%- include hero.html -%}
 
-{%- assign people = site.data.prototype.data | sort:'name' -%}
+{%- assign people = site.data.struggle.data | sort:'name' -%}
 {%- assign papers = site.data.venues.allpapers -%}
 {%- assign empty_authors = site.emptyArray -%}
 
@@ -142,5 +142,9 @@ description: Non-famous papers by famous people before they finished their PhDs
       {%- endif -%}
     {%- endfor -%}
 
-    <div class="container"><div class="row"><p class="col-md-12">Academic heroes for whom we don't have enough data: {{ empty_authors | map: 'name' | join: ", "}}</p></div></div>
+    <div class="container"><div class="row">
+      {%- if empty_authors.size > 0 -%}
+        <p class="col-md-12">Researchers for whom we don't have enough data: {{ empty_authors | map: 'name' | join: ", "}}</p>
+      {%- endif -%}
+    </div></div>
   </div>

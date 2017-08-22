@@ -7,7 +7,7 @@ description: My highest and...not-so-highest...cited papers from grad school.
 {%- include hero.html -%}
 
 {%- assign people = site.data.struggle.data | sort:'name' -%}
-{%- assign papers = site.data.venues.allpapers -%}
+{%- assign papers = site.data.venues.UIST -%}
 {%- assign empty_authors = site.emptyArray -%}
 
 <div class="gallery container">
@@ -59,13 +59,13 @@ description: My highest and...not-so-highest...cited papers from grad school.
             {%- endif -%}
           {%- endfor -%}
 
-          <div class="col-xs-12-xs col-sm-12 col-md-12 col-lg-6 col-xl-6" style="padding-bottom: 2em;">
+          <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" style="padding-bottom: 2em;">
             <h2 class="gallery__title">{{ person.name }}</h2>
             <div class="row">
-              <div class="col-md-3 gallery__note">
+              <div class="col-3 gallery__note">
                 <p class="">known for</p>
               </div>
-              <div class="col-md-9">
+              <div class="col-9">
                 <div class="paper" style="padding-bottom: 1em;">
 
                   <p class="gallery__description">
@@ -96,10 +96,10 @@ description: My highest and...not-so-highest...cited papers from grad school.
             </div>
 
             <div class="row">
-              <div class="col-md-3 gallery__note">
+              <div class="col-3 gallery__note">
                 <p class="">risks taken</p>
               </div>
-              <div class="col-md-9">
+              <div class="col-9">
                   <div class="paper" style="padding-bottom: 1em;">
                     <p class="gallery__description">
                     {%- case min_percentile -%}
